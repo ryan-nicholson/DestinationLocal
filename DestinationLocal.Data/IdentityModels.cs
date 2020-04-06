@@ -31,7 +31,14 @@ namespace DestinationLocal.Data
         {
             return new ApplicationDbContext();
         }
+        public DbSet<Destination> Destinations { get; set; }
+        public DbSet<Bar> Bars { get; set; }
         public DbSet<Hotel> Hotels { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
+        public DbSet<DestinationRating> DestinationRatings { get; set; }
+        public DbSet<BarRating> BarRatings { get; set; }
+        public DbSet<HotelRating> HotelRatings { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder

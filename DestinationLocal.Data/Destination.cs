@@ -31,5 +31,7 @@ namespace DestinationLocal.Data
         public virtual ICollection<Hotel> Hotels { get; set; } = new List<Hotel>();
         public virtual ICollection<Bar> Bars { get; set; } = new List<Bar>();
 
+        public virtual ICollection<DestinationRating> Ratings { get; set; }
+
     }
 }

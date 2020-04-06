@@ -28,5 +28,7 @@ namespace DestinationLocal.Data
         [ForeignKey(nameof(Destination))]
         public int DestinationId { get; set; }
         public virtual Destination Destination { get; set; }
+
+        public virtual ICollection<HotelRating> Ratings { get; set; }
     }
 }
