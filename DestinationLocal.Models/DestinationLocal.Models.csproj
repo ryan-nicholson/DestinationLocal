@@ -59,9 +59,17 @@
   <ItemGroup>
     <Compile Include="BarCreate.cs" />
     <Compile Include="BarListItem.cs" />
+    <Compile Include="BarRatingCreate.cs" />
+    <Compile Include="DestinationCreate.cs" />
+    <Compile Include="DestinationDetail.cs" />
+    <Compile Include="DestinationListItem.cs" />
+    <Compile Include="DestinationRatingCreate.cs" />
+    <Compile Include="DestinationRatingListItem.cs" />
     <Compile Include="HotelCreate.cs" />
     <Compile Include="HotelListItem.cs" />
+    <Compile Include="HotelRatingCreate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RatingListItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

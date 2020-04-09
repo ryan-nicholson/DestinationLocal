@@ -9,7 +9,7 @@ namespace DestinationLocal.Models
     public class DestinationRatingListItem : RatingListItem
     {
         public int DestinationId { get; set; }
-        public string Name { get; set; }
+        public string DestinationName { get; set; }
         public DateTime StayDate { get; set; }
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DestinationLocal.Data
 {
-    public class Rating
+    public abstract class Rating
     {
         [Key]
         public int RatingId { get; set; }
@@ -31,6 +31,7 @@ namespace DestinationLocal.Data
         public virtual Destination Destination { get; set; }
 
         public DateTime StayDate { get; set; }
+        public string Name { get; set; }
     }
 
     public class BarRating : Rating
@@ -38,6 +39,7 @@ namespace DestinationLocal.Data
         [ForeignKey(nameof(Bar))]
         public int BarId { get; set; }
         public virtual Bar Bar { get; set; }
+        public DateTime StayDate { get; set; }
     }
 
     public class HotelRating : Rating
@@ -45,5 +47,6 @@ namespace DestinationLocal.Data
         [ForeignKey(nameof(Hotel))]
         public int HotelId { get; set; }
         public virtual Hotel Hotel { get; set; }
+        public DateTime StayDate { get; set; }
     }
 }

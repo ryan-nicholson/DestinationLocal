@@ -25,7 +25,16 @@ namespace DestinationLocal.Data
         [Display(Name = "Bar Comment")]
         public string Comment { get; set; }
         public bool ServesFood { get; set; }
+        public double AverageRating
+        {
+            get
+            {
+                if (Ratings != null && Ratings.Count != 0)
+                    return (double)Ratings.Sum(rating => rating.Grade) / Ratings.Count;
 
+                return 0;
+            }
+        }
         [ForeignKey(nameof(Destination))]
         public int DestinationId { get; set; }
         public virtual Destination Destination { get; set; }

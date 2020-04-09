@@ -10,5 +10,6 @@ namespace DestinationLocal.Models
     {
         public int HotelId { get; set; }
         public string Name { get; set; }
+        public double AverageRating { get; set; }
     }
 }

@@ -24,7 +24,16 @@ namespace DestinationLocal.Data
         [MaxLength(2000, ErrorMessage = "Your comment is too long, please summarize to 2000 characters.")]
         [Display(Name = "Hotel Comment")]
         public string Comment { get; set; }
+        public double AverageRating
+        {
+            get
+            {
+                if (Ratings != null && Ratings.Count != 0)
+                    return (double)Ratings.Sum(rating => rating.Grade) / Ratings.Count;
 
+                return 0;
+            }
+        }
         [ForeignKey(nameof(Destination))]
         public int DestinationId { get; set; }
         public virtual Destination Destination { get; set; }

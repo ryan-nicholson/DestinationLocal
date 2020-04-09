@@ -7,14 +7,11 @@ using System.Threading.Tasks;
 
 namespace DestinationLocal.Models
 {
-    public class DestinationRatingCreate
+    public class HotelRatingCreate
     {
         [Required]
-        public int DestinationId { get; set; }
+        public int HotelId { get; set; }
         public string Name { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
-        public string Country { get; set; }
 
         [Required]
         [Range(1, 5)]

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,5 +14,7 @@ namespace DestinationLocal.Models
         public string City { get; set; }
         public string State { get; set; }
         public string Country { get; set; }
+        [Display(Name= "Overall Rating")]
+        public double AverageRating { get; set; }
     }
 }

@@ -16,6 +16,7 @@ namespace DestinationLocal.Models
 
         public List<BarListItem> Bars { get; set; } = new List<BarListItem>();
         public List<HotelListItem> Hotels { get; set; } = new List<HotelListItem>();
-       
+        public List<DestinationRatingListItem> Ratings { get; set; } = new List<DestinationRatingListItem>();
+
     }
 }

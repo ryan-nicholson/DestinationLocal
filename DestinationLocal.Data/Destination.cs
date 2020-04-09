@@ -27,11 +27,20 @@ namespace DestinationLocal.Data
         public string State { get; set; }
         [Required]
         public string Country { get; set; }
+        public double AverageRating
+        {
+            get
+            {
+                if (Ratings != null && Ratings.Count != 0)
+                    return (double)Ratings.Sum(rating => rating.Grade) / Ratings.Count;
 
+                return 0;
+            }
+        }
         public virtual ICollection<Hotel> Hotels { get; set; } = new List<Hotel>();
         public virtual ICollection<Bar> Bars { get; set; } = new List<Bar>();
 
-        public virtual ICollection<DestinationRating> Ratings { get; set; }
+        public virtual ICollection<DestinationRating> Ratings { get; set; } = new List<DestinationRating>();
 
     }
 }
