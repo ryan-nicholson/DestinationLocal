@@ -16,5 +16,6 @@ namespace DestinationLocal.Models
         public string Country { get; set; }
         [Display(Name= "Overall Rating")]
         public double AverageRating { get; set; }
+        
     }
 }

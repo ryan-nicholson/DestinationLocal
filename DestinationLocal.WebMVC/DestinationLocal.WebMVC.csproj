@@ -351,8 +351,8 @@
     <Content Include="Views\Hotel\Create.cshtml" />
     <Content Include="Views\Bar\Index.cshtml" />
     <Content Include="Views\Bar\Create.cshtml" />
-    <Content Include="Views\Destination\Index.cshtml" />
     <Content Include="Views\Destination\Create.cshtml" />
+    <Content Include="Views\Destination\Index.cshtml" />
     <Content Include="Views\Destination\Rate.cshtml" />
   </ItemGroup>
   <ItemGroup>

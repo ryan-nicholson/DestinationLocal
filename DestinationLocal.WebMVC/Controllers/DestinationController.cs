@@ -18,6 +18,7 @@ namespace DestinationLocal.WebMVC.Controllers
             var service = GetDestinationService();
             return View(await service.GetAllDestinationsAsync());
         }
+        
 
         //GET: Destination Create
         public ActionResult Create()

@@ -8,7 +8,7 @@
         public override void Up()
         {
             CreateTable(
-                "dbo.Rating",
+                "dbo.Ratings",
                 c => new
                     {
                         RatingId = c.Int(nullable: false, identity: true),
@@ -25,17 +25,17 @@
                         Discriminator = c.String(nullable: false, maxLength: 128),
                     })
                 .PrimaryKey(t => t.RatingId)
-                .ForeignKey("dbo.Hotel", t => t.HotelId, cascadeDelete: true)
-                .ForeignKey("dbo.Destination", t => t.DestinationId, cascadeDelete: false)
-                .ForeignKey("dbo.Bar", t => t.BarId, cascadeDelete: true)
-                .ForeignKey("dbo.ApplicationUser", t => t.UserId)
+                .ForeignKey("dbo.Hotels", t => t.HotelId, cascadeDelete: true)
+                .ForeignKey("dbo.Destinations", t => t.DestinationId, cascadeDelete: true)
+                .ForeignKey("dbo.Bars", t => t.BarId, cascadeDelete: true)
+                .ForeignKey("dbo.AspNetUsers", t => t.UserId)
                 .Index(t => t.UserId)
                 .Index(t => t.BarId)
                 .Index(t => t.HotelId)
                 .Index(t => t.DestinationId);
             
             CreateTable(
-                "dbo.Bar",
+                "dbo.Bars",
                 c => new
                     {
                         BarId = c.Int(nullable: false, identity: true),
@@ -47,23 +47,23 @@
                         DestinationId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.BarId)
-                .ForeignKey("dbo.Destination", t => t.DestinationId, cascadeDelete: false)
+                .ForeignKey("dbo.Destinations", t => t.DestinationId, cascadeDelete: false)
                 .Index(t => t.DestinationId);
             
             CreateTable(
-                "dbo.Destination",
+                "dbo.Destinations",
                 c => new
                     {
                         DestinationId = c.Int(nullable: false, identity: true),
                         Name = c.String(nullable: false),
                         City = c.String(nullable: false),
-                        State = c.String(),
+                        State = c.String(nullable: false),
                         Country = c.String(nullable: false),
                     })
                 .PrimaryKey(t => t.DestinationId);
             
             CreateTable(
-                "dbo.Hotel",
+                "dbo.Hotels",
                 c => new
                     {
                         HotelId = c.Int(nullable: false, identity: true),
@@ -74,15 +74,15 @@
                         DestinationId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.HotelId)
-                .ForeignKey("dbo.Destination", t => t.DestinationId, cascadeDelete: false)
+                .ForeignKey("dbo.Destinations", t => t.DestinationId, cascadeDelete: false)
                 .Index(t => t.DestinationId);
             
             CreateTable(
-                "dbo.ApplicationUser",
+                "dbo.AspNetUsers",
                 c => new
                     {
                         Id = c.String(nullable: false, maxLength: 128),
-                        Email = c.String(),
+                        Email = c.String(maxLength: 256),
                         EmailConfirmed = c.Boolean(nullable: false),
                         PasswordHash = c.String(),
                         SecurityStamp = c.String(),
@@ -92,94 +92,94 @@
                         LockoutEndDateUtc = c.DateTime(),
                         LockoutEnabled = c.Boolean(nullable: false),
                         AccessFailedCount = c.Int(nullable: false),
-                        UserName = c.String(),
+                        UserName = c.String(nullable: false, maxLength: 256),
                     })
-                .PrimaryKey(t => t.Id);
+                .PrimaryKey(t => t.Id)
+                .Index(t => t.UserName, unique: true, name: "UserNameIndex");
             
             CreateTable(
-                "dbo.IdentityUserClaim",
+                "dbo.AspNetUserClaims",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        UserId = c.String(),
+                        UserId = c.String(nullable: false, maxLength: 128),
                         ClaimType = c.String(),
                         ClaimValue = c.String(),
-                        ApplicationUser_Id = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.ApplicationUser", t => t.ApplicationUser_Id)
-                .Index(t => t.ApplicationUser_Id);
+                .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
+                .Index(t => t.UserId);
             
             CreateTable(
-                "dbo.IdentityUserLogin",
+                "dbo.AspNetUserLogins",
+                c => new
+                    {
+                        LoginProvider = c.String(nullable: false, maxLength: 128),
+                        ProviderKey = c.String(nullable: false, maxLength: 128),
+                        UserId = c.String(nullable: false, maxLength: 128),
+                    })
+                .PrimaryKey(t => new { t.LoginProvider, t.ProviderKey, t.UserId })
+                .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
+                .Index(t => t.UserId);
+            
+            CreateTable(
+                "dbo.AspNetUserRoles",
                 c => new
                     {
                         UserId = c.String(nullable: false, maxLength: 128),
-                        LoginProvider = c.String(),
-                        ProviderKey = c.String(),
-                        ApplicationUser_Id = c.String(maxLength: 128),
+                        RoleId = c.String(nullable: false, maxLength: 128),
                     })
-                .PrimaryKey(t => t.UserId)
-                .ForeignKey("dbo.ApplicationUser", t => t.ApplicationUser_Id)
-                .Index(t => t.ApplicationUser_Id);
+                .PrimaryKey(t => new { t.UserId, t.RoleId })
+                .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
+                .ForeignKey("dbo.AspNetRoles", t => t.RoleId, cascadeDelete: true)
+                .Index(t => t.UserId)
+                .Index(t => t.RoleId);
             
             CreateTable(
-                "dbo.IdentityUserRole",
-                c => new
-                    {
-                        UserId = c.String(nullable: false, maxLength: 128),
-                        RoleId = c.String(),
-                        ApplicationUser_Id = c.String(maxLength: 128),
-                        IdentityRole_Id = c.String(maxLength: 128),
-                    })
-                .PrimaryKey(t => t.UserId)
-                .ForeignKey("dbo.ApplicationUser", t => t.ApplicationUser_Id)
-                .ForeignKey("dbo.IdentityRole", t => t.IdentityRole_Id)
-                .Index(t => t.ApplicationUser_Id)
-                .Index(t => t.IdentityRole_Id);
-            
-            CreateTable(
-                "dbo.IdentityRole",
+                "dbo.AspNetRoles",
                 c => new
                     {
                         Id = c.String(nullable: false, maxLength: 128),
-                        Name = c.String(),
+                        Name = c.String(nullable: false, maxLength: 256),
                     })
-                .PrimaryKey(t => t.Id);
+                .PrimaryKey(t => t.Id)
+                .Index(t => t.Name, unique: true, name: "RoleNameIndex");
             
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.IdentityUserRole", "IdentityRole_Id", "dbo.IdentityRole");
-            DropForeignKey("dbo.Rating", "UserId", "dbo.ApplicationUser");
-            DropForeignKey("dbo.Rating", "BarId", "dbo.Bar");
-            DropForeignKey("dbo.Bar", "DestinationId", "dbo.Destination");
-            DropForeignKey("dbo.Rating", "DestinationId", "dbo.Destination");
-            DropForeignKey("dbo.IdentityUserRole", "ApplicationUser_Id", "dbo.ApplicationUser");
-            DropForeignKey("dbo.IdentityUserLogin", "ApplicationUser_Id", "dbo.ApplicationUser");
-            DropForeignKey("dbo.IdentityUserClaim", "ApplicationUser_Id", "dbo.ApplicationUser");
-            DropForeignKey("dbo.Rating", "HotelId", "dbo.Hotel");
-            DropForeignKey("dbo.Hotel", "DestinationId", "dbo.Destination");
-            DropIndex("dbo.IdentityUserRole", new[] { "IdentityRole_Id" });
-            DropIndex("dbo.IdentityUserRole", new[] { "ApplicationUser_Id" });
-            DropIndex("dbo.IdentityUserLogin", new[] { "ApplicationUser_Id" });
-            DropIndex("dbo.IdentityUserClaim", new[] { "ApplicationUser_Id" });
-            DropIndex("dbo.Hotel", new[] { "DestinationId" });
-            DropIndex("dbo.Bar", new[] { "DestinationId" });
-            DropIndex("dbo.Rating", new[] { "DestinationId" });
-            DropIndex("dbo.Rating", new[] { "HotelId" });
-            DropIndex("dbo.Rating", new[] { "BarId" });
-            DropIndex("dbo.Rating", new[] { "UserId" });
-            DropTable("dbo.IdentityRole");
-            DropTable("dbo.IdentityUserRole");
-            DropTable("dbo.IdentityUserLogin");
-            DropTable("dbo.IdentityUserClaim");
-            DropTable("dbo.ApplicationUser");
-            DropTable("dbo.Hotel");
-            DropTable("dbo.Destination");
-            DropTable("dbo.Bar");
-            DropTable("dbo.Rating");
+            DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
+            DropForeignKey("dbo.Ratings", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Ratings", "BarId", "dbo.Bars");
+            DropForeignKey("dbo.Bars", "DestinationId", "dbo.Destinations");
+            DropForeignKey("dbo.Ratings", "DestinationId", "dbo.Destinations");
+            DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Ratings", "HotelId", "dbo.Hotels");
+            DropForeignKey("dbo.Hotels", "DestinationId", "dbo.Destinations");
+            DropIndex("dbo.AspNetRoles", "RoleNameIndex");
+            DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
+            DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
+            DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
+            DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
+            DropIndex("dbo.AspNetUsers", "UserNameIndex");
+            DropIndex("dbo.Hotels", new[] { "DestinationId" });
+            DropIndex("dbo.Bars", new[] { "DestinationId" });
+            DropIndex("dbo.Ratings", new[] { "DestinationId" });
+            DropIndex("dbo.Ratings", new[] { "HotelId" });
+            DropIndex("dbo.Ratings", new[] { "BarId" });
+            DropIndex("dbo.Ratings", new[] { "UserId" });
+            DropTable("dbo.AspNetRoles");
+            DropTable("dbo.AspNetUserRoles");
+            DropTable("dbo.AspNetUserLogins");
+            DropTable("dbo.AspNetUserClaims");
+            DropTable("dbo.AspNetUsers");
+            DropTable("dbo.Hotels");
+            DropTable("dbo.Destinations");
+            DropTable("dbo.Bars");
+            DropTable("dbo.Ratings");
         }
     }
 }

@@ -18,7 +18,7 @@ namespace DestinationLocal.Services
             _context = new ApplicationDbContext();
             _userID = userID;
         }
-
+        //Create Destination
         public async Task<bool> CreateDestinationAsync(DestinationCreate model)
         {
             Destination entity = new Destination(model.Name, model.City, model.State, model.Country);
@@ -40,6 +40,7 @@ namespace DestinationLocal.Services
                 City = destination.City,
                 State = destination.State,
                 Country = destination.Country,
+                AverageRating = destination.AverageRating,
             }).ToList();
 
             return destinationList;
@@ -65,12 +66,13 @@ namespace DestinationLocal.Services
                     ServesFood = bar.ServesFood,
                     AverageRating = bar.AverageRating
                 }).ToList(),
+                
                 Hotels = entity.Hotels.Select(hotel => new HotelListItem
                 {
                     HotelId = hotel.HotelId,
                     Name = hotel.Name,
                     AverageRating = hotel.AverageRating
-                }).ToList()
+                }).ToList(),
             };
 
             foreach (var rating in entity.Ratings)
@@ -78,8 +80,8 @@ namespace DestinationLocal.Services
                 model.Ratings.Add(new DestinationRatingListItem
                 {
                     RatingId = rating.RatingId,
-                    DestinationId = rating.DestinationId,
-                    DestinationName = rating.Name,
+                    DestinationId = entity.DestinationId,
+                    DestinationName = entity.Name,
                     Comment = rating.Comment,
                     IsUserOwned = rating.UserId == _userID,
                     Grade = rating.Grade,
